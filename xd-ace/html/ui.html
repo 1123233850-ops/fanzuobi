@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XD ACE - 反作弊管理界面</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>XD ACE 反作弊系统</h1>
+            <nav>
+                <ul>
+                    <li><a href="#dashboard" class="active" data-page="dashboard">控制面板</a></li>
+                    <li><a href="#bans" data-page="bans">封禁管理</a></li>
+                    <li><a href="#violations" data-page="violations">违规记录</a></li>
+                    <li><a href="#players" data-page="players">在线玩家</a></li>
+                    <li><a href="#settings" data-page="settings">系统设置</a></li>
+                </ul>
+            </nav>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-nav">
+                <h2>系统概览</h2>
+                <div class="user-info">
+                    <span>管理员</span>
+                    <button class="logout-btn">退出登录</button>
+                </div>
+            </div>
+            
+            <!-- 控制面板 -->
+            <section id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>总玩家数</h3>
+                        <div class="stat-value" id="total-players">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>当前在线</h3>
+                        <div class="stat-value" id="online-players">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>总封禁数</h3>
+                        <div class="stat-value" id="total-bans">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>今日违规</h3>
+                        <div class="stat-value" id="today-violations">0</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>最近警告</h3>
+                    </div>
+                    <div id="alert-list">
+                        <!-- 警告信息将通过JavaScript动态添加 -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 封禁管理 -->
+            <section id="bans" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>封禁管理</h3>
+                        <div class="search-filter">
+                            <div class="search-box">
+                                <input type="text" placeholder="搜索玩家ID或理由..." id="ban-search">
+                            </div>
+                            <div class="filter-select">
+                                <select>
+                                    <option value="all">全部状态</option>
+                                    <option value="banned">已封禁</option>
+                                    <option value="unbanned">已解除</option>
+                                </select>
+                            </div>
+                            <button id="add-ban-btn" class="btn btn-primary">添加封禁</button>
+                        </div>
+                    </div>
+                    <table class="data-table" id="bans-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>玩家名称</th>
+                                <th>SteamID</th>
+                                <th>封禁理由</th>
+                                <th>封禁者</th>
+                                <th>封禁时间</th>
+                                <th>到期时间</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 封禁记录将通过JavaScript动态添加 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- 违规记录 -->
+            <section id="violations" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>违规记录</h3>
+                        <div class="search-filter">
+                            <div class="search-box">
+                                <input type="text" placeholder="搜索玩家ID或违规类型..." id="violation-search">
+                            </div>
+                            <div class="filter-select">
+                                <select>
+                                    <option value="all">全部状态</option>
+                                    <option value="warning">警告</option>
+                                    <option value="banned">已封禁</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="data-table" id="violations-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>玩家名称</th>
+                                <th>SteamID</th>
+                                <th>违规类型</th>
+                                <th>违规描述</th>
+                                <th>检测时间</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 违规记录将通过JavaScript动态添加 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- 在线玩家 -->
+            <section id="players" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>在线玩家</h3>
+                        <div class="search-filter">
+                            <div class="search-box">
+                                <input type="text" placeholder="搜索玩家名称或SteamID..." id="player-search">
+                            </div>
+                        </div>
+                    </div>
+                    <table class="data-table" id="players-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>玩家名称</th>
+                                <th>SteamID</th>
+                                <th>Ping</th>
+                                <th>游戏时间</th>
+                                <th>违规次数</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 玩家列表将通过JavaScript动态添加 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- 系统设置 -->
+            <section id="settings" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>系统设置</h3>
+                    </div>
+                    <div class="settings-grid">
+                        <div class="setting-section">
+                            <h4>检测模块设置</h4>
+                            <div class="setting-item">
+                                <label for="aimbot-detection">自瞄检测</label>
+                                <input type="checkbox" id="aimbot-detection" checked>
+                            </div>
+                            <div class="setting-item">
+                                <label for="speedhack-detection">速度hack检测</label>
+                                <input type="checkbox" id="speedhack-detection" checked>
+                            </div>
+                            <div class="setting-item">
+                                <label for="godmode-detection">上帝模式检测</label>
+                                <input type="checkbox" id="godmode-detection" checked>
+                            </div>
+                            <div class="setting-item">
+                                <label for="wallhack-detection">穿墙检测</label>
+                                <input type="checkbox" id="wallhack-detection" checked>
+                            </div>
+                            <div class="setting-item">
+                                <label for="infinite-ammo-detection">无限弹药检测</label>
+                                <input type="checkbox" id="infinite-ammo-detection" checked>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-section">
+                            <h4>检测阈值设置</h4>
+                            <div class="setting-item">
+                                <label for="aimbot-threshold">自瞄检测阈值 (%)</label>
+                                <input type="number" id="aimbot-threshold" value="95" min="50" max="100">
+                            </div>
+                            <div class="setting-item">
+                                <label for="speedhack-threshold">速度hack阈值 (倍)</label>
+                                <input type="number" id="speedhack-threshold" value="1.5" min="1.1" max="5" step="0.1">
+                            </div>
+                            <div class="setting-item">
+                                <label for="violation-ban-threshold">违规封禁阈值</label>
+                                <input type="number" id="violation-ban-threshold" value="3" min="1" max="10">
+                            </div>
+                            <div class="setting-item">
+                                <label for="check-interval">检测间隔 (ms)</label>
+                                <input type="number" id="check-interval" value="500" min="100" max="2000">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button id="save-settings-btn" class="btn btn-primary">保存设置</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- 添加封禁模态框 -->
+        <div id="add-ban-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>添加封禁</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <form id="add-ban-form">
+                    <div class="form-group">
+                        <label for="player-name">玩家名称</label>
+                        <input type="text" id="player-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="steam-id">SteamID</label>
+                        <input type="text" id="steam-id" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reason">封禁理由</label>
+                        <input type="text" id="reason" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="duration">封禁时长 (天)</label>
+                        <input type="number" id="duration" min="1" value="7">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal(document.getElementById('add-ban-modal'))">取消</button>
+                        <button type="submit" class="btn btn-danger">执行封禁</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
