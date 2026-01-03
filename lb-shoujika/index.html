@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手机运营商</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        /* 平板容器 */
+        #tablet-container {
+            width: 1000px;
+            max-width: 95vw;
+            height: 700px;
+            max-height: 90vh;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border-radius: 40px;
+            padding: 8px;
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+            position: relative;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* 平板屏幕 */
+        .tablet-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            border-radius: 34px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* 顶部状态栏 */
+        .status-bar {
+            height: 60px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .app-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .app-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        .close-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 59, 48, 0.15);
+            border: none;
+            border-radius: 50%;
+            color: #ff3b30;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 59, 48, 0.25);
+            transform: scale(1.1);
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* 侧边导航 */
+        .sidebar {
+            width: 220px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            padding: 30px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            color: white;
+            border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .nav-item.active::before {
+            transform: scaleY(1);
+        }
+
+        .nav-icon {
+            font-size: 22px;
+            width: 28px;
+            text-align: center;
+        }
+
+        /* 内容面板 */
+        .content-panel {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 套餐卡片网格 */
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .package-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .package-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .package-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+
+        .package-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .package-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .package-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .package-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .package-price {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 15px 0;
+            line-height: 1;
+        }
+
+        .package-price small {
+            font-size: 18px;
+            opacity: 0.7;
+        }
+
+        .package-features {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(102, 126, 234, 0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* 号码卡片 */
+        .number-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .number-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .number-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(102, 126, 234, 0.5);
+            transform: translateX(8px);
+        }
+
+        .number-main {
+            flex: 1;
+        }
+
+        .number-phone {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .number-stats {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .stat-icon {
+            font-size: 18px;
+        }
+
+        .status-badge {
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-active {
+            background: rgba(52, 199, 89, 0.2);
+            color: #34c759;
+            border: 1px solid rgba(52, 199, 89, 0.3);
+        }
+
+        .status-inactive {
+            background: rgba(255, 159, 10, 0.2);
+            color: #ff9f0a;
+            border: 1px solid rgba(255, 159, 10, 0.3);
+        }
+
+        .status-suspended {
+            background: rgba(255, 59, 48, 0.2);
+            color: #ff3b30;
+            border: 1px solid rgba(255, 59, 48, 0.3);
+        }
+
+        /* 充值表单 */
+        .recharge-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            display: block;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-select,
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-select:focus,
+        .form-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-select option {
+            background: #2d2d44;
+            color: white;
+        }
+
+        .amount-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .amount-btn {
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .amount-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .amount-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .empty-icon {
+            font-size: 100px;
+            margin-bottom: 30px;
+            opacity: 0.3;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .empty-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        /* 滚动条 */
+        .content-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content-panel::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .content-panel::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 10px;
+        }
+
+        .content-panel::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+                padding: 20px 10px;
+            }
+
+            .nav-item span {
+                display: none;
+            }
+
+            .package-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .amount-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="tablet-container">
+        <div class="tablet-screen">
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-left">
+                    <div class="app-icon">📱</div>
+                    <div class="app-title">花海运营商</div>
+                </div>
+                <div class="status-right">
+                    <span>⏰ <span id="current-time"></span></span>
+                    <button class="close-btn" onclick="closeTablet()">×</button>
+                </div>
+            </div>
+
+            <!-- 主内容 -->
+            <div class="main-content">
+                <!-- 侧边导航 -->
+                <div class="sidebar">
+                    <div class="nav-item active" onclick="switchTab('purchase')">
+                        <span class="nav-icon">🛒</span>
+                        <span>购买套餐</span>
+                    </div>
+                    <div class="nav-item" onclick="switchTab('mynumbers')">
+                        <span class="nav-icon">📋</span>
+                        <span>我的号码</span>
+                    </div>
+                    <div class="nav-item" onclick="switchTab('recharge')">
+                        <span class="nav-icon">💰</span>
+                        <span>充值话费</span>
+                    </div>
+                </div>
+
+                <!-- 内容面板 -->
+                <div class="content-panel">
+                    <!-- 购买套餐 -->
+                    <div id="purchase-pane" class="tab-pane active">
+                        <div class="package-grid" id="package-list"></div>
+                    </div>
+
+                    <!-- 我的号码 -->
+                    <div id="mynumbers-pane" class="tab-pane">
+                        <div class="number-list" id="number-list"></div>
+                    </div>
+
+                    <!-- 充值话费 -->
+                    <div id="recharge-pane" class="tab-pane">
+                        <div class="recharge-container">
+                            <div class="form-card">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <span>📱</span> 选择手机号
+                                    </label>
+                                    <select class="form-select" id="recharge-number">
+                                        <option value="">请选择要充值的手机号</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <span>💳</span> 支付方式
+                                    </label>
+                                    <select class="form-select" id="recharge-method">
+                                        <option value="cash">💵 现金支付</option>
+                                        <option value="bank">🏦 银行转账</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <span>💰</span> 充值金额
+                                    </label>
+                                    <input type="number" class="form-input" id="recharge-amount" placeholder="输入充值金额" min="1">
+                                    <div class="amount-grid">
+                                        <button class="amount-btn" onclick="setAmount(50)">$50</button>
+                                        <button class="amount-btn" onclick="setAmount(100)">$100</button>
+                                        <button class="amount-btn" onclick="setAmount(200)">$200</button>
+                                        <button class="amount-btn" onclick="setAmount(500)">$500</button>
+                                        <button class="amount-btn" onclick="setAmount(1000)">$1000</button>
+                                        <button class="amount-btn" onclick="setAmount(2000)">$2000</button>
+                                    </div>
+                                </div>
+
+                                <button class="submit-btn" onclick="submitRecharge()">
+                                    ✨ 立即充值
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检测运行环境
+        const isFiveM = typeof GetParentResourceName !== 'undefined';
+        
+        // 更新时间
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('current-time').textContent = timeStr;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // 模拟数据
+        const mockPackages = [
+            { id: 1, name: "入门套餐", price: 299, call_minutes: 100, sms_count: 50, data_mb: 1024, validity_days: 30 },
+            { id: 2, name: "标准套餐", price: 599, call_minutes: 300, sms_count: 150, data_mb: 3072, validity_days: 30 },
+            { id: 3, name: "豪华套餐", price: 999, call_minutes: 1000, sms_count: 500, data_mb: 10240, validity_days: 30 },
+            { id: 4, name: "至尊套餐", price: 1999, call_minutes: 3000, sms_count: 1000, data_mb: 30720, validity_days: 30 }
+        ];
+
+        const mockNumbers = [
+            { phone_number: "555-0101", status: "active", balance: 150, call_minutes: 80, sms_count: 35, data_mb: 800, expiry_date: "2024-02-15" },
+            { phone_number: "555-0202", status: "inactive", balance: 0, call_minutes: 0, sms_count: 0, data_mb: 0, expiry_date: null },
+            { phone_number: "555-0303", status: "active", balance: 450, call_minutes: 250, sms_count: 120, data_mb: 2500, expiry_date: "2024-03-20" }
+        ];
+
+        // 初始化
+        window.addEventListener('load', function() {
+            if (!isFiveM) {
+                loadPackages(mockPackages);
+                loadMyNumbers(mockNumbers);
+                loadRechargeNumbers(mockNumbers.filter(n => n.status === 'active'));
+            }
+        });
+
+        // FiveM 消息监听
+        if (isFiveM) {
+            window.addEventListener('message', function(event) {
+                const data = event.data;
+                if (data.action === 'openTablet') {
+                    document.getElementById('tablet-container').style.display = 'flex';
+                } else if (data.action === 'closeTablet') {
+                    closeTablet();
+                } else if (data.action === 'loadPackages') {
+                    loadPackages(data.packages);
+                } else if (data.action === 'loadMyNumbers') {
+                    loadMyNumbers(data.numbers);
+                } else if (data.action === 'loadRechargeNumbers') {
+                    loadRechargeNumbers(data.numbers);
+                }
+            });
+        }
+
+        function closeTablet() {
+            if (isFiveM) {
+                fetch(`https://${GetParentResourceName()}/close`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+            
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.getElementById(tabName + '-pane').classList.add('active');
+
+            if (isFiveM) {
+                fetch(`https://${GetParentResourceName()}/get${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+            }
+        }
+
+        function loadPackages(packages) {
+            const container = document.getElementById('package-list');
+            if (!packages || packages.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-text">暂无可用套餐</div></div>';
+                return;
+            }
+
+            container.innerHTML = packages.map(pkg => `
+                <div class="package-card" onclick="purchasePackage(${pkg.id})">
+                    <div class="package-header">
+                        <div>
+                            <div class="package-name">${pkg.name}</div>
+                        </div>
+                        <div class="package-badge">HOT</div>
+                    </div>
+                    <div class="package-price">$${pkg.price}<small>/月</small></div>
+                    <div class="package-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">📞</div>
+                            <span>${pkg.call_minutes} 分钟通话</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">💬</div>
+                            <span>${pkg.sms_count} 条短信</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📶</div>
+                            <span>${pkg.data_mb} MB 流量</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">⏱️</div>
+                            <span>${pkg.validity_days} 天有效期</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function purchasePackage(packageId) {
+            if (isFiveM) {
+                if (confirm('确认购买此套餐吗？')) {
+                    fetch(`https://${GetParentResourceName()}/purchasePackage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ packageId })
+                    });
+                }
+            } else {
+                alert(`预览模式\n套餐 ID: ${packageId}`);
+            }
+        }
+
+        function loadMyNumbers(numbers) {
+            const container = document.getElementById('number-list');
+            if (!numbers || numbers.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">📱</div><div class="empty-text">您还没有手机号</div></div>';
+                return;
+            }
+
+            container.innerHTML = numbers.map(num => {
+                const statusClass = num.status === 'active' ? 'status-active' : num.status === 'inactive' ? 'status-inactive' : 'status-suspended';
